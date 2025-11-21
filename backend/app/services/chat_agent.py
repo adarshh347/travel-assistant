@@ -9,7 +9,6 @@ from backend.app.core.config import settings
 from backend.app.services.weather_service import get_weather
 
 
-
 @tool
 async def check_weather_tool(city: str):
     """Get the current weather of a city. Input is a city name."""
