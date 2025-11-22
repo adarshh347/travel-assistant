@@ -36,11 +36,17 @@ async def transcribe(file: UploadFile = File(...)):
         print(f"Error processing file: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @router.post("/chat")
 async def chat(request: ChatRequest):
     try:
-        response = await get_chat_response(request.message)
-        return {"response": response}
+        # result is now {"response": "...", "weather_data": [...]}
+        result = await get_chat_response(request.message)
+
+        return {
+            "response": result["response"],
+            "weather_data": result["weather_data"]  # Passing this to frontend
+        }
     except Exception as e:
-        print(e)
+        print(f"Chat Error: {e}")
         raise HTTPException(status_code=500, detail=str(e))

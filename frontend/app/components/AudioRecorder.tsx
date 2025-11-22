@@ -49,6 +49,7 @@ export default function AudioRecorder({ onTranscriptionComplete }: Props) {
     formData.append("file", audioBlob, "recording.webm");
 
     try {
+      // ✅ Updated to Port 9004
       const res = await fetch("http://localhost:9004/api/transcribe", {
         method: "POST",
         body: formData,
@@ -68,18 +69,19 @@ export default function AudioRecorder({ onTranscriptionComplete }: Props) {
     <button
       onClick={isRecording ? stopRecording : startRecording}
       disabled={isProcessing}
-      className={`p-2 rounded-full transition-all ${
+      className={`p-2 rounded-lg transition-all ${
         isRecording
-          ? "bg-red-500 hover:bg-red-600 animate-pulse"
-          : "bg-slate-200 hover:bg-slate-300"
+          ? "bg-red-100 text-red-600 hover:bg-red-200 animate-pulse"
+          : "bg-slate-200 text-slate-600 hover:bg-slate-300"
       }`}
+      title={isRecording ? "Stop Recording" : "Start Recording"}
     >
       {isProcessing ? (
-        <Loader2 className="animate-spin text-slate-600" size={20} />
+        <Loader2 className="animate-spin" size={20} />
       ) : isRecording ? (
-        <Square className="text-white" size={20} />
+        <Square size={20} />
       ) : (
-        <Mic className="text-slate-700" size={20} />
+        <Mic size={20} />
       )}
     </button>
   );
