@@ -1,5 +1,6 @@
 // app/config/api.ts
 
-export const BACKEND_PORT = "9001";  // <-- change this anytime
+// Backend base URL (Render URL)
+// export const API_BASE_URL = "https://travel-assistant-xq8l.onrender.com/api";
 
-export const API_BASE_URL = `http://localhost:${BACKEND_PORT}`;
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:9001";
