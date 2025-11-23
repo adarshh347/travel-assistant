@@ -4,10 +4,15 @@ from typing import TypedDict, Literal, Optional, List, Any
 from langchain_groq import ChatGroq
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 from langgraph.graph import StateGraph, END, START
+# non-deployable
+# from backend.app.core.config import settings
+# from backend.app.services.weather_service import get_weather_multi
+# from backend.app.models.dashboard import DashboardResponse
 
-from backend.app.core.config import settings
-from backend.app.services.weather_service import get_weather_multi
-from backend.app.models.dashboard import DashboardResponse
+# deployable
+from app.core.config import settings
+from app.services.weather_service import get_weather_multi
+from app.models.dashboard import DashboardResponse
 
 
 # -------------------------

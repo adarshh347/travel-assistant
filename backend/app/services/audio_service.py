@@ -1,6 +1,9 @@
 import io
 from groq import Groq
-from backend.app.core.config import settings
+# from backend.app.core.config import settings
+
+from app.core.config import settings
+
 
 client = Groq(api_key=settings.GROQ_API_KEY)
 
