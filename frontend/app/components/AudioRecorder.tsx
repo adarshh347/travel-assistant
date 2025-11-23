@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef } from "react";
 import { Mic, Square, Loader2 } from "lucide-react";
+import { API_BASE_URL } from "../../config/api";
 
 interface Props {
   onTranscriptionComplete: (text: string) => void;
@@ -15,7 +16,13 @@ export default function AudioRecorder({ onTranscriptionComplete }: Props) {
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      mediaRecorderRef.current = new MediaRecorder(stream);
+
+      // ✅ FIX: Explicitly define the mimeType for better compatibility
+      const mimeType = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
+        ? "audio/webm;codecs=opus"
+        : "audio/webm";
+
+      mediaRecorderRef.current = new MediaRecorder(stream, { mimeType });
       chunksRef.current = [];
 
       mediaRecorderRef.current.ondataavailable = (e) => {
@@ -23,9 +30,10 @@ export default function AudioRecorder({ onTranscriptionComplete }: Props) {
       };
 
       mediaRecorderRef.current.onstop = async () => {
+        // ✅ FIX: Use the same mimeType for the Blob
         const audioBlob = new Blob(chunksRef.current, { type: "audio/webm" });
         await handleUpload(audioBlob);
-        stream.getTracks().forEach(track => track.stop()); // Stop mic
+        stream.getTracks().forEach(track => track.stop());
       };
 
       mediaRecorderRef.current.start();
@@ -46,18 +54,31 @@ export default function AudioRecorder({ onTranscriptionComplete }: Props) {
   const handleUpload = async (audioBlob: Blob) => {
     setIsProcessing(true);
     const formData = new FormData();
+    // Filename explicit extension helps the backend identify format
     formData.append("file", audioBlob, "recording.webm");
 
     try {
-      // ✅ Updated to Port 9004
-      const res = await fetch("http://localhost:9004/api/transcribe", {
+      const res = await fetch(`${API_BASE_URL}/api/transcribe`, {
         method: "POST",
         body: formData,
       });
+
       const data = await res.json();
-      if (data.transcription) {
-        onTranscriptionComplete(data.transcription);
+
+      // ✅ Logic to handle object vs string response safely
+      let textResult = data.transcription;
+
+      if (typeof textResult === 'object' && textResult !== null) {
+          textResult = textResult.text || JSON.stringify(textResult);
       }
+
+      // Only update if we have valid text
+      if (textResult && typeof textResult === 'string' && textResult.trim().length > 0) {
+        onTranscriptionComplete(textResult);
+      } else {
+        console.warn("Empty transcription received");
+      }
+
     } catch (error) {
       console.error("Transcription failed", error);
     } finally {
@@ -69,17 +90,16 @@ export default function AudioRecorder({ onTranscriptionComplete }: Props) {
     <button
       onClick={isRecording ? stopRecording : startRecording}
       disabled={isProcessing}
-      className={`p-2 rounded-lg transition-all ${
+      className={`p-3 rounded-full transition-all shadow-md ${
         isRecording
-          ? "bg-red-100 text-red-600 hover:bg-red-200 animate-pulse"
-          : "bg-slate-200 text-slate-600 hover:bg-slate-300"
+          ? "bg-red-500 hover:bg-red-600 animate-pulse text-white"
+          : "bg-slate-100 hover:bg-slate-200 text-slate-600"
       }`}
-      title={isRecording ? "Stop Recording" : "Start Recording"}
     >
       {isProcessing ? (
         <Loader2 className="animate-spin" size={20} />
       ) : isRecording ? (
-        <Square size={20} />
+        <Square size={20} fill="currentColor" />
       ) : (
         <Mic size={20} />
       )}
