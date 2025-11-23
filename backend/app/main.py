@@ -1,6 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.app.routers import chat
+# nondeployable
+# from backend.app.routers import chat
+
+# deployable
+from app.routers import chat
+
 
 app = FastAPI(title="Weather Travel Bot")
 

@@ -1,7 +1,14 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from pydantic import BaseModel
-from backend.app.services.audio_service import transcribe_audio
-from backend.app.services.chat_agent import get_chat_response
+# non-deployable
+# from backend.app.services.audio_service import transcribe_audio
+# from backend.app.services.chat_agent import get_chat_response
+
+# deployable
+from app.services.audio_service import transcribe_audio
+from app.services.chat_agent import get_chat_response
+
+
 
 router = APIRouter()
 

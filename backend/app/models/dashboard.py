@@ -1,7 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import List
 
-
 # 1. New Sub-Model for the Buttons
 class FashionStyle(BaseModel):
     style_name: str = Field(
