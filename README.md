@@ -23,6 +23,7 @@ https://travel-assistant-xq8l.onrender.com/docs
 初回アクセスは 50〜60 秒ほど待ってください。
 
 🏗️ システムアーキテクチャ
+<img width="1024" height="559" alt="image" src="https://github.com/user-attachments/assets/f364c308-a9a9-4ba0-90e2-80eff4bac37a" />
 
 このプロジェクトは クライアント(UI) と AI ロジック(サーバー) を明確に分離しています。
 
@@ -136,6 +137,7 @@ https://travel-assistant-xq8l.onrender.com/docs
 ⚠️ Backend may take 50–60 seconds to wake up on Render free tier.
 
 🏗️ System Architecture
+<img width="1024" height="559" alt="image" src="https://github.com/user-attachments/assets/9eb69ac2-c55f-4590-b8be-8d758b83986c" />
 
 A clean Client–Server Architecture:
 
